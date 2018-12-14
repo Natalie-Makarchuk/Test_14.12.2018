@@ -1,0 +1,1 @@
+This is example file for upload test in TestExamples class.

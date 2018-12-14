@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Smoke Suit" guice-stage="PRODUCTION" verbose="10">
+    <listeners>
+        <listener class-name="com.teaminternational.coe.utils.testng.TimeoutTransformer"/>
+        <listener class-name="com.teaminternational.coe.utils.testng.ThreadCountTransformer"/>
+    </listeners>
+    <test name="Test1" enabled="true" verbose="10">
+        <classes>
+            <class name="com.teaminternational.coe.tests.example.TestExamples">
+            </class>
+        </classes>
+    </test>
+</suite>

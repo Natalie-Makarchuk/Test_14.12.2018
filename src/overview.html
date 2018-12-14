@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Framework overview</title>
+</head>
+<body>
+<h1>Framework for automation testing using Selenide, Testng, Allure and integration with Zephyr .</h1>
+<div class="overview-content">
+<h2>Framework overview.</h2>
+<p>Main goal of this framework is reducing time required for creating and supporting automation testing code.
+Framework achieves this goal by organizing flexible and well documented classes and methods for solving common and frequently encountered tasks and problems in automation testing.</p>
+<p>List of tasks and problems you can easily solve using this framework:</p>
+<ul>
+    <li>Create basic code for automation testing using packages 'Testng', 'Selenium', 'Selenide', 'Allure', integration with 'Zephyr' and 'PageObject' pattern.
+        This allow you to start immediately to write your own custom PageObjects and tests without spending time for organizing project from scratch.</li>
+    <li>Create custom PageObjects with different level of complication (for pages in tested project) using basic PageObjects from framework, their methods and provided examples.
+        This allow you to minimize time for creating basic set of methods of pages to test frequently encountered functionality in web-projects like 'authorization', 'switch language', etc.</li>
+    <li>Retrieve full reports with detailed information about tests with screenshots and without spending much time for this.</li>
+    <li>Quickly write small simple tests for web-pages with commonly used interfaces.</li>
+    <li>Save your time by using wide framework's collection of examples of usage for every Selenide method.</li>
+</ul>
+<p>This framework should provide another big benefit for QA. It's supposed that latest versions of this framework will support all newest and innovative methods and tools that appearing in IT industry.</p>
+<p>Framework solution has four components at the moment:</p>
+    <ul>
+        <li>Framework code on Java. Can be found in repository (see <a href="#installation">Installation</a> section).</li>
+        <li>Framework documentation. Can be found at the moment at <a href="https://coe-qa.github.io">https://coe-qa.github.io</a></li>
+        <li>Examples of framework's usage in code on Java. Can be found in repository (see <a href="#installation">Installation</a> section).</li>
+        <li>Test application used for test examples. Can be found at the moment at <a href="https://coe-qa.github.io">https://coe-qa.github.io</a></li>
+    </ul>
+<h2>Tutorial.</h2>
+    <a name="installation">
+<h3>1. Installation.</h3>
+<p> Latest version of source code can be found in 2 places:
+<ul>
+    <li><b>Mercurial:</b> <a href="http://172.23.4.20/COE_Test_Framework" target="_blank">http://172.23.4.20/COE_Test_Framework</a>
+        (ask read only access in Help Desk Request form <a href="https://ids.teaminternational.com/helpdesk/Lists/Requests/NewForm.aspx" target="_blank">https://ids.teaminternational.com/helpdesk/Lists/Requests/NewForm.aspx</a>)</li>
+    <li><b>Git repository on BitBucket:</b> <a href="https://bitbucket.org/coe-qa-teaminternational/coe-test-automation/">https://bitbucket.org/coe-qa-teaminternational/coe-test-automation/</a> ask access in Center of Excellence.</li>
+</ul>
+Requirements for using framework :
+<ul>
+    <li>JDK 1.8.0_181 (make sure that JAVA_HOME environment variable defined anf pointed to correct path wher JDK wss installed )</li>
+    <li>Gradle 4.10.2</li>
+</ul>
+Framework can work on lower version but wasn't tested. So if you have any problems with compilation and use lower versions of required software, it can depend on it.
+In this case you must upgrade your software and try to compile again.
+
+<h3>2. Configuration.</h3>
+
+After cloning or unpacking sources you must configure your project. Some of properties are mandatory, some are optional.
+Below you can see the list of files with properties and description of each property.<br><br>
+
+<ul>
+    <li>
+        <b>gradle.properties:</b>
+        <ul>
+            <li><i>suit</i> - path to Test Suit xml configuration file</li>
+            <li><i>gridHubUrl</i> - path to selenium grid server , used if browser set to 'grid'</li>
+            <li><i>networkFileDir</i> - network path for upload/download files (not used in this version)</li>
+            <li><i>reportlocation</i> - path for saving reports and screenshots</li>
+            <li><i>browser</i> - define which browser use for tests</li>
+            <li><i>selenide.timeout</i> - define timeout for explicit waits in Selenide configuration (in milliseconds)</li>
+            <li><i>envurl</i> - default address for tested application </li>
+            <li><i>maxRetryCount</i> - max number of retries for each test in case of failed status</li>
+            <li><i>threadcount</i> - how many threads executed in the same time in case of browser = grid</li>
+            <li><i>verbose</i> - Level of logging for TestNG. Must be defined form 0 to 10. 0 - no logging. 10 - all levels. </li>
+            <li><i>enableZapi</i> - Enable integration with Zephyr (JIRA test management plugin) via Zephyr API (ZAPI)</li>
+        </ul>
+    </li>
+    <li>
+        <b>src/test/resources/env.properties:</b>
+        <ul>
+            <li><i>project.directory</i> -https://coe-qa.github.io name of directory where you placed this project (not used in this version)</li>
+            <li><i>snapshot.directory</i> - directory for saving screenshots (not used in this version)</li>
+            <li><i>cookie.lifetime</i> - expiration of cookies in seconds (not used in this version)</li>
+            <li><i>test.timeout</i> - timeout for execution of one test in minutes</li>
+            <li><i>frameworktest_baseurl</i> - URL for Test Examples application</li>
+            <li><i>zephyrBaseURL</i> - URL for Zephyr API gate. It can be found in ZAPI documentation. At the moment it's https://prod-api.zephyr4jiracloud.com/connect .</li>
+            <li><i>secretKey</i> - secret access key for Zephyr API. Can be found in JIRA Dashboard in JIRA Settings->Apps->ZAPI.<br> <img src="./../img/img01.PNG"/></li>
+            <li><i>zapiAccessKey</i> - shared access key for Zephyr API. Can be found in JIRA Dashboard in JIRA Settings->Apps->ZAPI.</li>
+            <li><i>userName</i> - user name for account on JIRA Cloud that hass API access. Can be found in JIRA Dashboard in JIRA Settings->Apps->ZAPI.</li>
+            <li><i>projectID</i> - Project ID in JIRA Cloud. Can be found in JIRA Dashboard in the project management "Project Settings"->"Details" in URL parameter pid. Should look like "10000" or "10001", etc.<br>  <img src="./../img/img02.PNG"/> </li>
+            <li><i>versionId</i> - Version ID of tested version of project in JIRA Cloud. Can be found in JIRA Dashboard in the project management "Project Settings"->"Versions" ->click on the created version. Version ID will be in URL after "/versions/". Should look like "10000" or "10001", etc. <br> <img src="./../img/img04.PNG"/> </li>
+            <li><i>cycleId</i> - ID of current cycle of testing in JIRA Cloud. Before looking for cycle ID you must create all test cases in JIRA Project as issues with type "test" (see image below).<br>
+                <img src="./../img/img03.PNG"/>
+                <br>
+                After this you should use ID of issue in @TmsLink annotation for your method that annotated also as @Test. To find ID of issue go to "Tests" in JIRA Dashboard in the project management.
+                And select version to which you assigned this issue. Find your test in the list and on "Edit" in last column dropdown menu click right button and select "Open in new window" in context menu. In opened window you will see in URL
+                as parameter "id". See screenshot below.<br>
+                <img src="./../img/img05.PNG"/>
+                <br>
+                If it is first execution of tests for testing cycle, you have to set "-1" into this properties file and new cycle will be created automatically.
+                If you already has create cycle and want to run new execution, you can find ID of cycle in JIRA Dashboard in the project management. Click "Tests" in left menu then
+                select cycle in the Cycle Summary tree. And click on the anu icon "E" in column Actions of tests list. ID of Cycle will be in URL as parameter node.id and
+                should look like "9abb8d88-a9e7-4b97-b01f-2fd90ef81c77" See image below.<br>
+                <img src="./../img/img06.PNG"/>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b>src/test/resources/allure.properties:</b>
+        <ul>
+            <li><i>allure.results.directory</i> - path for saving results (not used in this version)</li>
+            <li><i>allure.issues.tracker.pattern</i> - path to issue tracker on Atlassian.net for project (not used in this version)</li>
+            <li><i>allure.tests.management.pattern</i> - path to test's management on Atlassian.net for project (not used in this version)</li>
+            <li><i>allure.max.title.length</i> - Maximal length of step title. (not used in this version)</li>
+        </ul>
+    </li>
+    <li>
+        <b>src/test/resources/uiMap.properties:</b>
+        <ul>
+            <li><i>searchresults.results</i> - default locator (used in test examples) for search result and automatically loaded to class SearchResultsPage</li>
+            <li><i>autocomplete.stateInput</i> - default locator (used in test examples) for input field with autocomplete function and automatically loaded to class AutocompletePage</li>
+            <li><i>autocomplete.autocompleteBox</i> - default locator (used in test examples) for autocomplete values box and automatically loaded to class AutocompletePage</li>
+        </ul>
+    </li>
+    <li>
+        <b>src/test/resources/users.properties:</b>
+        <ul>
+            <li><i>admin.login</i> - login for user admin (not used in this version)</li>
+            <li><i>admin.password</i> - password for user admin (not used in this version)</li>
+        </ul>
+    </li>
+    <li>
+        <b>src/test/resources/META-INF/aop.xml: configuration XML for AspectJ</b>
+    </li>
+    <li>
+        <b>src/test/java/com/teaminternational/coe/suits/Smoke.xml: configuration XML for Test Examples test suite. Use it as example for your TestSuites.</b>
+    </li>
+</ul>
+</p>
+<h3>3. Writing tests.</h3>
+<p>In the framework we provided Example Test Suit. It's a simple testsuite with one single Class (com.teaminternational.coe.tests.example.TestExamples) with tests
+and described in XML file (src/test/java/com/teaminternational/coe/suits/Smoke.xml). You can copy this XML and class file, replace path to XML in config and replaces
+tests in your Class with tests.
+</p>
+<p>
+    In package com.teaminternational.coe.pages.examples you can see examples of PageObject classes. You can use them in your projects or extend it. You can create your own package for PageObject classes or add classes into package com.teaminternational.coe.custompages.
+</p>
+<p>
+    In the class com.teaminternational.coe.tests.example.TestExamples you can find examples of usage all Selenide and selenium.Actions methods and using PageObject classes (AutocompletePage, GooglePage, SearchResultsPage).
+    This testcase is an extension of com.teaminternational.coe.tests.BaseCustomTest. You should create your own test extending com.teaminternational.coe.tests.BaseCustomTest where you can add your own common methods for all tescases.
+    Avoid to change class com.teaminternational.coe.tests.BaseWebDriverTest, but if you think that this class can be better for all people who uses this framework, please read section <a href="#contribute">Upgrading and updating. Contributing</a>
+</p>
+<p>
+    In the package com.teaminternational.coe.utils you can find some useful helpers and methods that can be used in your testscases. Avoid to change classes in this package but you absolutely free to add your own helpers and classes.
+</p>
+<p>List of helpful methods and classes:
+    <ul>
+        <li><i>pages.AutocompletePage</i> - class that have methods for filling input and picking value with autocomplete. </li>
+        <li><i>pages.SearchResultsPage</i> - class that have useful methods for working with list of results on the search pages.</li>
+        <li><i>webdriver.ByJavaScript</i> - Additional locator for Selenide that allow you to gather elements collections or filter one element using javascript code.</li>
+        <li><i>webdriver.ByJquery</i> - Additional locator for Selenide that allow you to gather elements collections or filter one element using jQuery code.</li>
+        <li><i>CustomHttpClient</i> - class wrapper that helps you to work with RESTFul services. Used in framework for requests to Zephyr API but you can use it for other APIs.</li>
+        <li><i>CommonHelper</i> - class contains a set of useful methods that helps generate testing data or work with thos data.</li>
+        <li><i>CommonHelper.getIpsumString</i> - generates standard "Lorem ipsum..." text.</li>
+        <li><i>CommonHelper.getRandomID</i> - generates random ID.</li>
+        <li><i>CommonHelper.getRandomIntID</i> - generates random integer ID.</li>
+        <li><i>CommonHelper.getRandomIntBetween</i> - generates random integer between two defined values.</li>
+        <li><i>CommonHelper.getRandomLongBetween</i> - generates random long integer between two defined values.</li>
+        <li><i>CommonHelper.randomString</i> - generates random string.</li>
+        <li><i>CommonHelper.randomStringWithSpaces</i> - generates random string with spaces.</li>
+        <li><i>CommonHelper.uploadFile</i> - upload file into first file-input element on the page from disk by specified path in parameter.</li>
+        <li><i>CommonHelper.getScreenshotBytes</i> - Get Image Screenshot as sequence of bytes on underlying instance of Selenium WebDriver.</li>
+        <li><i>CommonHelper.getPageSourceBytes</i> - Get the source of the last loaded page as sequence of bytes on underlying instance of Selenium WebDriver.</li>
+        <li><i>CommonHelper.addAllureStep</i> - Writes custom additional step to the Allure report of current testcase.
+            Useful for debugging or when you just want to log into report some simple step in testcase that doesn't call any PageObject methods.</li>
+    </ul>
+</p>
+<h3>4. View results (reports).</h3>
+<p>All reports stored in 3 places: Gradle report, TestNG report and Allure report. Allure report is the most useful one. Below you can see default pathes for all reports:
+    <ul>
+      <li><b><i>Gradle report</i></b> - /build/reports/tests/test/index.html</li>
+      <li><b><i>TestNG report</i></b> - /build/reports/testng-report/index.html</li>
+      <li><b><i>Allure report</i></b> - /build/reports/allure-results (to watch it on your computer use 'allure-view-report.bat' or command 'allure serve build/reports/allure-results')</li>
+    </ul>
+</p>
+<p>
+    Also if Zephyr API was enabled and you connected your testing project with JIRA project, you certainly will see all execution's results in JIRA Dashboard of the project.
+</p>
+<a name="contribute"></a>
+<h3>5. Upgrading and updating. Contributing.</h3>
+<p>In order to flexibility we allow you to download framework and modify it in any way that fits your requirements on the project. But in order to keep your framework
+ready for upgrading and keep it up-to-date, we suggest you:
+    <ul>
+    <li>1) avoid changing classes in package com.teaminternational.coe.pages but instead creates your own package for PageObject classes where you can extend AbstractPage
+        or any page from package com.teaminternational.coe.pages. For example you can add your classes in package com.teaminternational.coe.custompages.</li>
+    <li>2) avoid changing classes from package com.teaminternational.coe.utils, but you can add any new classes.</li>
+    <li>3) avoid changing class com.teaminternational.coe.tests.BaseWebDriverTest, add your own methods for BaseWebtests into class com.teaminternational.coe.tests.BaseCustomTest
+        and extend this BaseCustomTest for your tests.</li>
+</ul>
+It's supposed that classes in packages com.teaminternational.coe.pages, com.teaminternational.coe.utils and class com.teaminternational.coe.tests.BaseWebDriverTest will have additional classes/methods in the future.
+If you want to help extend those classes and share your custom classes and methods with other QA teams, you can add it in our repository. Contact, please, Team Center of Excellence stuff and ask access to git-repository on BitBucket.
+The new branch of repository will be created for you. You have to commit and push your changes into this branch and create pull request on BitBucket for merging your changes into master repository.
+</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: "io.qameta.allure"
+
+group = 'com.teaminternational'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.annotationProcessorPath = files("io.qameta.allure.description.JavaDocDescriptionsProcessor")
+}
+
+defaultTasks 'clean', 'test'
+
+description = """"""
+
+configurations {
+    agent
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    flatDir {
+        dirs 'src/test/resources/lib'
+    }
+}
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.5"
+    }
+}
+
+clean {
+    delete reportlocation
+}
+
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
+}
+
+test {
+    useTestNG() {
+        suites(suit)
+        useDefaultListeners = true
+        outputDirectory = file("$project.buildDir//reports/testng-report")
+    }
+    testLogging {
+        exceptionFormat = 'full'
+    }
+    afterTest { desc, result ->
+        println "${desc.className} ${desc.name} ${result.resultType}"
+    }
+    outputs.upToDateWhen { false }
+}
+
+task copyHistory(type: Copy) {
+    sleep 5 * 1000
+    from networkFileDir + 'history'
+    into './build/reports/allure-results/history'
+}
+
+task storeHistory(type: Copy) {
+    sleep 5 * 1000
+    from './build/reports/build/allure-results-web/history'
+    into networkFileDir + 'history'
+}
+
+task runSingleTests(type: JavaExec, dependsOn: 'classes') {
+    doFirst {
+        jvmArgs "-javaagent:${configurations.agent.singleFile}"
+    }
+    main = 'org.testng.TestNG'
+    classpath = files("./src/test/java/com/teaminternational/coe/suits/",
+            project.sourceSets.main.compileClasspath,
+            project.sourceSets.test.compileClasspath,
+            project.sourceSets.main.runtimeClasspath,
+            project.sourceSets.test.runtimeClasspath)
+    args = ["-d", reportlocation, suit]
+    jvmArgs = [
+            "-Denvurl=" + System.properties['envurl'],
+            "-Dbrowser=" + System.properties['browser'],
+            "-Dthreadcount=" + System.properties['threadcount'],
+            "-DmaxRetryCount=" + System.properties['maxRetryCount'],
+            "-DenableZapi=" + System.properties['enableZapi'],
+            "-DnetworkFileDir=" + System.properties['networkFileDir'],
+    ]
+
+}
+
+allure {
+    version = '2.7.0'
+    aspectjweaver = true
+    autoconfigure = true
+    resultsDir = file("$project.buildDir//reports/allure-results")
+    useTestNG {
+        version = '+'
+    }
+}
+
+dependencies {
+    agent "org.aspectj:aspectjweaver:+"
+    compile group: 'com.google.inject', name: 'guice', version: '1.0'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.5.3'
+    compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '+'
+    compile group: 'com.atlassian.jwt', name: 'jwt-core', version: '1.5.+'
+    compile group: 'com.atlassian.fugue', name: 'fugue', version: '+'
+    compile(group: 'com.atlassian.connect', name: 'ac-play-java_2.10', version: '0.10.1') {
+        exclude group: 'com.typesafe.play'
+    }
+    compile group: 'commons-configuration', name: 'commons-configuration', version: '+'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '+'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '+'
+    compile group: 'org.apache.commons', name: 'commons-configuration2', version: '+'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.6'
+    testCompile 'org.testng:testng:6.14.3'
+    testCompile 'com.codeborne:selenide:4.14.2'
+}
+

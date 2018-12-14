@@ -1,0 +1,16 @@
+.idea
+.settings
+target
+.classpath
+.project
+*.iml
+*.log
+*.orig
+.gradle/
+build/
+.allure/*.*
+
+
+downloadedFiles/
+src/test/files/
+out/*.*
